@@ -103,6 +103,7 @@ $.extend(TimeGrid.prototype, {
 	fgSegHtml: function(seg, disableResizing) {
 		var view = this.view;
 		var event = seg.event;
+		var escapeEventHtmlTitle = view.opt('escapeEventHtmlTitle');
 		var isDraggable = view.isEventDraggable(event);
 		var isResizable = !disableResizing && seg.isEnd && view.isEventResizable(event);
 		var classes = this.getSegClasses(seg, isDraggable, isResizable);
@@ -151,7 +152,10 @@ $.extend(TimeGrid.prototype, {
 						) +
 					(event.title ?
 						'<div class="fc-title">' +
-							htmlEscape(event.title) +
+							(escapeEventHtmlTitle ?
+								htmlEscape(event.title) :
+								event.title
+							) +
 						'</div>' :
 						''
 						) +
@@ -197,7 +201,7 @@ $.extend(TimeGrid.prototype, {
 
 		if (shouldOverlap && seg.forwardPressure) {
 			// add padding to the edge so that forward stacked events don't cover the resizer's icon
-			props[isRTL ? 'marginLeft' : 'marginRight'] = 10 * 2; // 10 is a guesstimate of the icon's width 
+			props[isRTL ? 'marginLeft' : 'marginRight'] = 10 * 2; // 10 is a guesstimate of the icon's width
 		}
 
 		return props;

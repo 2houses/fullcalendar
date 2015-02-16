@@ -45,7 +45,8 @@ module.exports = function(config) {
 			'../dist/fullcalendar.css',
 			'../tests/base.css',
 
-			'../tests/automated/*.js'
+			//'../tests/automated/*.js'
+			'../tests/automated/escapeEventHtmlTitle.js'
 		],
 
 		// list of files to exclude

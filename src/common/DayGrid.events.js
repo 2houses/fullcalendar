@@ -92,6 +92,7 @@ $.extend(DayGrid.prototype, {
 	fgSegHtml: function(seg, disableResizing) {
 		var view = this.view;
 		var isRTL = view.opt('isRTL');
+		var escapeEventHtmlTitle = view.opt('escapeEventHtmlTitle');
 		var event = seg.event;
 		var isDraggable = view.isEventDraggable(event);
 		var isResizable = !disableResizing && event.allDay && seg.isEnd && view.isEventResizable(event);
@@ -99,6 +100,7 @@ $.extend(DayGrid.prototype, {
 		var skinCss = this.getEventSkinCss(event);
 		var timeHtml = '';
 		var titleHtml;
+		var titleContent;
 
 		classes.unshift('fc-day-grid-event');
 
@@ -107,11 +109,24 @@ $.extend(DayGrid.prototype, {
 			timeHtml = '<span class="fc-time">' + htmlEscape(view.getEventTimeText(event)) + '</span>';
 		}
 
+
+		if (event.title){
+			if (escapeEventHtmlTitle) {
+				titleContent = htmlEscape(event.title);
+			}
+			else {
+				titleContent = event.title;
+			}
+	  }
+	  else {
+			titleContent = '';
+	  }
+
 		titleHtml =
 			'<span class="fc-title">' +
-				(htmlEscape(event.title || '') || '&nbsp;') + // we always want one line of height
+				(titleContent || '&nbsp;') + // we always want one line of height
 			'</span>';
-		
+
 		return '<a class="' + classes.join(' ') + '"' +
 				(event.url ?
 					' href="' + htmlEscape(event.url) + '"' :
@@ -235,7 +250,7 @@ $.extend(DayGrid.prototype, {
 		// Give preference to elements with certain criteria, so they have
 		// a chance to be closer to the top.
 		segs.sort(compareSegs);
-		
+
 		for (i = 0; i < segs.length; i++) {
 			seg = segs[i];
 
